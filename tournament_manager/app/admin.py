@@ -3,6 +3,8 @@ from django.contrib import admin
 # Register your models here.
 from app.models import Group, Knockout, Team, Match, Tournament, TournamentNote
 
+admin.site.site_header = "Tournament Manager"
+
 
 class MatchesInline(admin.TabularInline):
     model = Match
@@ -54,14 +56,14 @@ class TeamAdmin(admin.ModelAdmin):
         AwayMatchesInline
     ]
 
-    readonly_fields = ['games_played',
-                       'wins',
-                       'losses',
-                       'draws',
-                       'goals_for',
-                       'goals_against',
-                       'goal_difference',
-                       'points']
+    # readonly_fields = ['games_played',
+    #                    'wins',
+    #                    'losses',
+    #                    'draws',
+    #                    'goals_for',
+    #                    'goals_against',
+    #                    'goal_difference',
+    #                    'points']
 
 
 class TournamentNoteInline(admin.TabularInline):

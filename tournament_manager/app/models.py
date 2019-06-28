@@ -48,19 +48,27 @@ class Team(models.Model):
         return f"{self.name}"
 
     @property
+    def group_home_matches(self):
+        return self.home_matches.filter(knockout__isnull=True)
+
+    @property
+    def group_away_matches(self):
+        return self.away_matches.filter(knockout__isnull=True)
+
+    @property
     def games_played(self):
-        return self.home_matches.count() + self.away_matches.count()
+        return self.group_away_matches.count() + self.group_away_matches.count()
 
     @property
     def goals_for(self):
-        home_goals = self.home_matches.aggregate(sum=Coalesce(Sum('home_goals'), 0))
-        away_goals = self.away_matches.aggregate(sum=Coalesce(Sum('away_goals'), 0))
+        home_goals = self.group_home_matches.aggregate(sum=Coalesce(Sum('home_goals'), 0))
+        away_goals = self.group_away_matches.aggregate(sum=Coalesce(Sum('away_goals'), 0))
         return home_goals['sum'] + away_goals['sum']
 
     @property
     def goals_against(self):
-        home_goals_conceeded = self.home_matches.aggregate(sum=Coalesce(Sum('away_goals'), 0))
-        away_goals_conceeded = self.away_matches.aggregate(sum=Coalesce(Sum('home_goals'), 0))
+        home_goals_conceeded = self.group_home_matches.aggregate(sum=Coalesce(Sum('away_goals'), 0))
+        away_goals_conceeded = self.group_away_matches.aggregate(sum=Coalesce(Sum('home_goals'), 0))
         return home_goals_conceeded['sum'] + away_goals_conceeded['sum']
 
     @property
@@ -69,20 +77,20 @@ class Team(models.Model):
 
     @property
     def wins(self):
-        home_wins = self.home_matches.filter(home_goals__gt=F('away_goals')).count()
-        away_wins = self.away_matches.filter(away_goals__gt=F('home_goals')).count()
+        home_wins = self.group_home_matches.filter(home_goals__gt=F('away_goals'), started=True).count()
+        away_wins = self.group_away_matches.filter(away_goals__gt=F('home_goals'), started=True).count()
         return home_wins + away_wins
 
     @property
     def losses(self):
-        home_losses = self.home_matches.filter(home_goals__lt=F('away_goals')).count()
-        away_losses = self.away_matches.filter(away_goals__lt=F('home_goals')).count()
+        home_losses = self.group_home_matches.filter(home_goals__lt=F('away_goals'), started=True).count()
+        away_losses = self.group_away_matches.filter(away_goals__lt=F('home_goals'), started=True).count()
         return home_losses + away_losses
 
     @property
     def draws(self):
-        home_draws = self.home_matches.filter(home_goals=F('away_goals')).count()
-        away_draws = self.away_matches.filter(away_goals=F('home_goals')).count()
+        home_draws = self.group_home_matches.filter(home_goals=F('away_goals'), started=True).count()
+        away_draws = self.group_away_matches.filter(away_goals=F('home_goals'), started=True).count()
         return home_draws + away_draws
 
     @property
@@ -98,12 +106,17 @@ class Match(models.Model):
     """
     A football match. Can be won, lost or drawn.
     """
+    class Meta:
+        verbose_name_plural = 'matches'
+
     # Can be either in a group stage or a knockout stage
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='matches', blank=True)
     knockout = models.ForeignKey(Knockout, on_delete=models.SET_NULL, null=True, related_name='matches', blank=True)
 
-    time = models.DateTimeField()
+    time = models.TimeField()
     pitch = models.IntegerField()
+
+    started = models.BooleanField(default=False)
 
     is_placeholder = models.BooleanField(default=False)
     home_team_placeholder = models.CharField(max_length=100, default='', blank=True, null=True)
