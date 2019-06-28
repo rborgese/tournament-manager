@@ -4,10 +4,14 @@
       <div class="col-md-6">
         <h1>{{tournament.name}} @ <small>{{tournament.location}}</small></h1>
         <h1>Group Stage</h1>
+        <h3>Notes</h3>
+        <ul>
+          {% for note in tournament.notes.all %}
+            <li>{{ note.content }}</li>
+          {% endfor %}
+        </ul>
       </div>
-      <div class="col-md-6">
-        Notes
-
+      <div class="col-md-6 image-section">
         {% if tournament.logo %}
           <img class="tournament-logo float-right" src="{{ tournament.logo.url }}">
         {% endif %}

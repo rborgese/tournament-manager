@@ -7,9 +7,7 @@
       <h1>Knockout Stage</h1>
     </div>
 
-    <div class="col-md-6">
-        Notes
-
+    <div class="col-md-6 image-section">
         {% if tournament.logo %}
           <img class="tournament-logo float-right" src="{{ tournament.logo.url }}">
         {% endif %}
@@ -17,7 +15,6 @@
         {% if tournament.extra_image %}
           <img class="tournament-logo rounded-circle float-right" src="{{ tournament.extra_image.url }}">
         {% endif %}
-
       </div>
   </div>
 
@@ -29,8 +26,6 @@
 
     <div class="col-md-6 group-section">
       <h2>{{knockout.name}}</h2>
-
-      <h3>Matches</h3>
       <table class="table">
         <thead>
         <tr>

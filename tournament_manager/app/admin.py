@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from app.models import Group, Knockout, Team, Match, Tournament
+from app.models import Group, Knockout, Team, Match, Tournament, TournamentNote
 
 
 class MatchesInline(admin.TabularInline):
@@ -64,7 +64,16 @@ class TeamAdmin(admin.ModelAdmin):
                        'points']
 
 
-admin.site.register(Tournament)
+class TournamentNoteInline(admin.TabularInline):
+    model = TournamentNote
+    verbose_name_plural = "Tournament Notes"
+
+
+class TournamentAdmin(admin.ModelAdmin):
+    inlines = [TournamentNoteInline]
+
+
+admin.site.register(Tournament, TournamentAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Knockout, KnockoutAdmin)
 admin.site.register(Team, TeamAdmin)

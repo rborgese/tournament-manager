@@ -137,3 +137,11 @@ class Tournament(models.Model):
 
     def __str__(self):
         return f"{self.name} @ {self.location}"
+
+
+class TournamentNote(models.Model):
+    content = models.TextField()
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, null=True, blank=True, related_name="notes")
+
+    def __str__(self):
+        return f"{self.tournament.name} : {self.content}"
