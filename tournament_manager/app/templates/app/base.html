@@ -90,30 +90,14 @@
 
   <div class="container-fluid">
 
-   <div class="row topbar">
-      <div class="col-md-6 image-section">
-
-        {% if tournament.logo %}
-          <img class="tournament-logo float-right" src="{{ tournament.logo.url }}">
-        {% endif %}
-
-        {% if tournament.extra_image %}
-          <img class="tournament-logo rounded-circle float-right" src="{{ tournament.extra_image.url }}">
-        {% endif %}
-
-      </div>
-    </div>
-</div>
-  <div class="container-fluid">
-
     {% block content %}
     {% endblock %}
       <!-- Optional JavaScript -->
-    <!--<script>-->
-      <!--window.setTimeout(function () {-->
-        <!--location.href = window.location-->
-      <!--}, 5000); // refresh/redirect after 5 seconds.-->
-    <!--</script>-->
+    <script>
+      window.setTimeout(function () {
+        location.href = window.location
+      }, 5000); // refresh/redirect after 5 seconds.
+    </script>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
