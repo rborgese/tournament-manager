@@ -2,11 +2,11 @@
 {% block content %}
 
   <div class="row">
-    <div class="col-md-6 header">
-      <h1>Group Stage</h1>
+    <div class="col-md-7 header">
+      <h1>{{tournament.name}} | Group Stage</h1>
     </div>
 
-    <div class="col-md-6 image-section">
+    <div class="col-md-5 image-section">
         {% if tournament.logo %}
           <img class="tournament-logo float-right" src="{{ tournament.logo.url }}">
         {% endif %}
