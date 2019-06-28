@@ -51,6 +51,7 @@ class KnockoutAdmin(admin.ModelAdmin):
 
 
 class TeamAdmin(admin.ModelAdmin):
+    list_display = ['name', 'has_paid']
     inlines = [
         HomeMatchesInline,
         AwayMatchesInline
