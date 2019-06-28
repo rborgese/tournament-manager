@@ -49,15 +49,15 @@ class Team(models.Model):
 
     @property
     def group_home_matches(self):
-        return self.home_matches.filter(knockout__isnull=True)
+        return self.home_matches.filter(knockout__isnull=True, started=True)
 
     @property
     def group_away_matches(self):
-        return self.away_matches.filter(knockout__isnull=True)
+        return self.away_matches.filter(knockout__isnull=True, started=True)
 
     @property
     def games_played(self):
-        return self.group_away_matches.count() + self.group_away_matches.count()
+        return self.group_home_matches.count() + self.group_away_matches.count()
 
     @property
     def goals_for(self):
