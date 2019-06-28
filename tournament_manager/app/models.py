@@ -106,8 +106,8 @@ class Match(models.Model):
     pitch = models.IntegerField()
 
     is_placeholder = models.BooleanField(default=False)
-    home_team_placeholder = models.CharField(max_length=100, default='')
-    away_team_placeholder = models.CharField(max_length=100, default='')
+    home_team_placeholder = models.CharField(max_length=100, default='', blank=True, null=True)
+    away_team_placeholder = models.CharField(max_length=100, default='', blank=True, null=True)
 
     home_team = models.ForeignKey(Team, on_delete=models.SET_NULL, related_name='home_matches', null=True, blank=True)
     away_team = models.ForeignKey(Team, on_delete=models.SET_NULL, related_name='away_matches', null=True, blank=True)
@@ -124,7 +124,7 @@ class Match(models.Model):
         return self.away_goals > self.home_goals
 
     def __str__(self):
-        if not self.home_team or not self.away_team_placeholder:
+        if not self.home_team or not self.away_team:
             return 'TBC'
         return f"{self.home_team.name} vs {self.away_team.name}"
 
@@ -133,6 +133,7 @@ class Tournament(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
+    extra_image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} @ {self.location}"

@@ -190,3 +190,7 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/pycharm
+
+.idea/
+
+tournament_manager/media/
