@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Tournament Manager</title>
+
+    <style>
+      .bold-text {
+        font-weight: bold;
+      }
+
+      .bg-red {
+        background-color: red;
+      }
+
+    </style>
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-red">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/tournament/groups">Groups <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="/tournament/knockouts">Knockouts</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-md-6">
+        <h1>{{tournament.name}} @ <small>{{tournament.location}}</small></h1>
+      </div>
+      <div class="col-md-6">
+        Notes
+
+        {% if tournament.logo %}
+          {{ tournament.logo.url }}
+        {% endif %}
+
+      </div>
+    </div>
+
+    <h1>Groups</h1>
+
+    {% for group in groups %}
+    <!-- Display each group and the matches -->
+    <h2>{{group.name}}</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Teams</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Ranking</th>
+              <th scope="col">Name</th>
+              <th scope="col">Games Played</th>
+              <th scope="col">W</th>
+              <th scope="col">D</th>
+              <th scope="col">L</th>
+              <th scope="col">GF</th>
+              <th scope="col">GA</th>
+              <th scope="col">GD</th>
+              <th scope="col">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for position, team in group.sorted_teams %}
+            <tr>
+              <td>{{position}}</td>
+              <td>{{team.name}}</td>
+              <td>{{team.games_played}}</td>
+              <td>{{team.wins}}</td>
+              <td>{{team.draws}}</td>
+              <td>{{team.losses}}</td>
+              <td>{{team.goals_for}}</td>
+              <td>{{team.goals_against}}</td>
+              <td>{{team.goal_difference}}</td>
+              <td class="bold-text">{{team.points}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Matches</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Home</th>
+              <th scope="col"></th>
+              <th scope="col">Away</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col">Pitch</th>
+              <th scope="col">Time</th>
+
+            </tr>
+          </thead>
+          <tbody>
+          {% for match in group.matches.all %}
+            <tr>
+              {% if match.is_placeholder %}
+              <td>{{match.home_team_placeholder}}</td>
+              <td>vs</td>
+              <td>{{match.away_team_placeholder}}</td>
+              {% else %}
+              <td>{{match.home_team.name}}</td>
+              <td>vs</td>
+              <td>{{match.away_team.name}}</td>
+              {% endif %}
+
+              <td {% if match.is_home_win %} class="bold-text" {% endif %}>{{match.home_goals}}</td>
+              <td>:</td>
+              <td {% if match.is_away_win %} class="bold-text" {% endif %}>{{match.away_goals}}</td>
+              <td>{{match.pitch}}</td>
+              <td>{{match.time}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  <hr/>
+    {% endfor %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </div>
+  </body>
+</html>
